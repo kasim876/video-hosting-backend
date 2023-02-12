@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 .env
 .idea
 dist
 package-lock.json
 node_modules
 yarn.lock
+=======
+/node_modules/
+package-lock.json
+.env
+>>>>>>> de9c6eb (initial commit)

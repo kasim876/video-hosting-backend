@@ -1,9 +1,32 @@
 {
   "tabWidth": 2,
   "singleQuote": true,
+<<<<<<< HEAD
+=======
+  "jsxSingleQuote": false,
+>>>>>>> de9c6eb (initial commit)
   "arrowParens": "avoid",
   "semi": true,
   "trailingComma": "all",
   "bracketSpacing": false,
+<<<<<<< HEAD
   "bracketSameLine": false
+=======
+  "bracketSameLine": false,
+  "singleAttributePerLine": true,
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "^@pages/(.*)$",
+    "^@components/(.*)$",
+    "^@assets/(.*)$",
+    "^@store/(.*)$",
+    "^@utils/(.*)$",
+    "^@/(.*)$",
+    "^../(.*)$",
+    "^./(.*)$",
+    "(.scss)$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+>>>>>>> de9c6eb (initial commit)
 }
