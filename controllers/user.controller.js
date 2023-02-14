@@ -8,11 +8,15 @@ class UserController {
   async registration(req, res) {
     const {email, password, username} = req.body;
 
-    const candidate = await UserEntity.findOne({
+    const candidateEmail = await UserEntity.findOne({
       where: {email},
     });
 
-    if (candidate) {
+    const candidateUsername = await UserEntity.findOne({
+      username: {username},
+    });
+
+    if (candidateEmail || candidateUsername) {
       return res.status(404).json({
         error: 'Такой пользователь уже зарегестрирован',
       });
