@@ -1,7 +1,7 @@
 const path = require('path');
 const uuid = require('uuid');
 
-const VideoEntity = require('../models/video');
+const VideoEntity = require('../video/video.model');
 
 class VideoController {
   async getAll(req, res) {
