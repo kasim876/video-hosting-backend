@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const UserEntity = require('../models/user');
+const UserEntity = require('../user/user.model');
 
 const generateJwt = require('../utils/generateJwtToken');
 
@@ -12,11 +12,7 @@ class UserController {
       where: {email},
     });
 
-    const candidateUsername = await UserEntity.findOne({
-      username: {username},
-    });
-
-    if (candidateEmail || candidateUsername) {
+    if (candidateEmail) {
       return res.status(404).json({
         error: 'Такой пользователь уже зарегестрирован',
       });
