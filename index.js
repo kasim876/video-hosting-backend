@@ -5,7 +5,6 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 
 const sequelize = require('./db');
-const models = require('./models');
 const router = require('./router');
 
 const port = process.env.PORT || 9000;
@@ -21,8 +20,6 @@ app.use('/api', router);
 
 const start = async () => {
   try {
-    await sequelize.authenticate();
-    await sequelize.sync({alter: true});
     app.listen(port, () => console.log(`server started on port: ${port}`));
   } catch (error) {
     console.error(error);
