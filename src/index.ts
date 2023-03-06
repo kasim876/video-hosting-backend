@@ -1,9 +1,9 @@
 import {createExpressServer} from 'routing-controllers';
 import dotenv from 'dotenv';
 
-import {UserController} from './controller/user-controller';
-
 dotenv.config();
+
+import {UserController} from './controller/user-controller';
 
 const PORT = process.env.PORT || 9000;
 
