@@ -1,13 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-interface IUser {
-  id: number;
-  name: string;
-  email: string;
-  avatar: string | null;
-}
+import {IUser} from '../types/user';
 
-export const generateJwt = (user: IUser) => {
+const generateJwt = (user: IUser) => {
   return jwt.sign(
     {
       id: user.id,
@@ -21,3 +16,5 @@ export const generateJwt = (user: IUser) => {
     },
   );
 };
+
+export default generateJwt;
