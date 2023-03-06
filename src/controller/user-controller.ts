@@ -4,7 +4,7 @@ import {Body, JsonController, Post, Res} from 'routing-controllers';
 import {hash, compareSync} from 'bcrypt';
 
 import db from '../db';
-import {generateJwt} from '../utils/generateJwt';
+import generateJwt from '../utils/generateJwt';
 
 interface IRequestBody {
   email: string;
