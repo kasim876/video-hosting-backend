@@ -28,7 +28,7 @@ export class UserController {
 
     if (candidateUser.rowCount) {
       return response
-        .status(404)
+        .status(500)
         .json(`Пользователь с данным e-mail уже зарегестрирован`);
     }
 
@@ -64,8 +64,17 @@ export class UserController {
       return response.status(404).json(`Неверный пароль`);
     }
 
+    const subscriptions = await db.query(
+      `
+        SELECT users.id, users.name, users.avatar FROM users
+        INNER JOIN subscriptions ON users.id = subscriptions.to_user_id
+        WHERE from_user_id = $1
+      `,
+      [user.rows[0].id],
+    );
+
     const token = generateJwt(user.rows[0]);
 
-    return response.json({token});
+    return response.json({token: token, subscriptions: subscriptions.rows});
   }
 }
