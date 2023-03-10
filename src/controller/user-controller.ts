@@ -67,7 +67,7 @@ export class UserController {
     const subscriptions = await db.query(
       `
         SELECT users.id, users.name, users.avatar FROM users
-        INNER JOIN subscriptions ON users.id = subscriptions.to_user_id
+        JOIN subscriptions ON users.id = subscriptions.to_user_id
         WHERE from_user_id = $1
       `,
       [user.rows[0].id],
