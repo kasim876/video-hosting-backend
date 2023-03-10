@@ -7,12 +7,13 @@ dotenv.config();
 
 import {UserController} from './controller/user-controller';
 import {SubscriptionsController} from './controller/subscriptions-controller';
+import {VideoController} from './controller/video-controller';
 
 const PORT = process.env.PORT || 9000;
 
 const app = createExpressServer({
   cors: true,
-  controllers: [UserController, SubscriptionsController],
+  controllers: [UserController, SubscriptionsController, VideoController],
   routePrefix: '/api',
 });
 
