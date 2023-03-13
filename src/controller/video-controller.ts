@@ -22,6 +22,11 @@ export class VideoController {
     return this.videoService.getAll(query);
   }
 
+  @Get('/:id')
+  async getOne(@Param('id') id: number) {
+    return this.videoService.getOne(id);
+  }
+
   @Get('/most-popular')
   async getMostPopular() {
     return this.videoService.getMostPopular();
