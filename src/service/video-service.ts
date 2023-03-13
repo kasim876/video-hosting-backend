@@ -65,6 +65,7 @@ export class VideoService {
           subscriptions: true,
         },
         comments: {
+          id: true,
           message: true,
           user: {
             id: true,
