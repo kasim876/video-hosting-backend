@@ -67,7 +67,7 @@ export class AuthService {
     });
 
     if (oldUser) {
-      return new Error('Данный e-mail уже зарегестрирован');
+      throw new Error('Данный e-mail уже зарегестрирован');
     }
 
     const hashPassword = await hash(dto.password, 3);
