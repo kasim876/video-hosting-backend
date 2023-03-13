@@ -1,20 +1,25 @@
 import * as path from 'path';
 import dotenv from 'dotenv';
-import {createExpressServer} from 'routing-controllers';
+import {Action, createExpressServer} from 'routing-controllers';
 import serveStatic from 'serve-static';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
+import {AuthController} from './controller/auth-controller';
 import {UserController} from './controller/user-controller';
-import {SubscriptionsController} from './controller/subscriptions-controller';
-import {VideoController} from './controller/video-controller';
 
 const PORT = process.env.PORT || 9000;
 
 const app = createExpressServer({
   cors: true,
-  controllers: [UserController, SubscriptionsController, VideoController],
+  controllers: [AuthController, UserController],
   routePrefix: '/api',
+  currentUserChecker: async (action: Action) => {
+    const token = action.request.headers.authorization.split(' ')[1];
+
+    return jwt.verify(token, process.env.JWT_SECRET);
+  },
 });
 
 app.use(serveStatic(path.join(__dirname, 'static/video')));
