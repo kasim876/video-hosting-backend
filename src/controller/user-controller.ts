@@ -1,80 +1,41 @@
 import 'reflect-metadata';
-import {Response} from 'express';
-import {Body, JsonController, Post, Res} from 'routing-controllers';
-import {hash, compareSync} from 'bcrypt';
+import {
+  Body,
+  CurrentUser,
+  Get,
+  JsonController,
+  Param,
+  Patch,
+  Put,
+} from 'routing-controllers';
 
-import db from '../db';
-import generateJwt from '../utils/generateJwt';
+import {UserDto} from '../types/user-dto';
+import {UserService} from '../service/user-service';
 
-interface IRequestBody {
-  email: string;
-  password: string;
-  name?: string;
-}
-
-@JsonController()
+@JsonController('/user')
 export class UserController {
-  @Post('/users/registration')
-  async registration(
-    @Body() requestBody: IRequestBody,
-    @Res() response: Response,
-  ) {
-    const {email, name, password} = requestBody;
+  constructor(private readonly userService: UserService = new UserService()) {}
 
-    const candidateUser = await db.query(
-      `SELECT * FROM users WHERE email = $1`,
-      [email],
-    );
-
-    if (candidateUser.rowCount) {
-      return response
-        .status(500)
-        .json(`Пользователь с данным e-mail уже зарегестрирован`);
-    }
-
-    const hashPassword = await hash(password, 3);
-
-    const user = await db.query(
-      `INSERT INTO users (name, email, password, avatar) values ($1, $2, $3, $4) RETURNING *`,
-      [name, email, hashPassword, null],
-    );
-
-    const token = generateJwt(user.rows[0]);
-
-    return response.json({token});
+  @Get()
+  async getAll() {
+    return this.userService.getAll();
   }
 
-  @Post('/users/login')
-  async login(@Body() requestBody: IRequestBody, @Res() response: Response) {
-    const {email, password} = requestBody;
+  @Get('/profile')
+  async getProfile(@CurrentUser({required: true}) {id}) {
+    return this.userService.getOne(id);
+  }
 
-    const user = await db.query(`SELECT * FROM users WHERE email = $1`, [
-      email,
-    ]);
+  @Put()
+  async updateUser(@CurrentUser({required: true}) {id}, @Body() dto: UserDto) {
+    return this.userService.updateProfile(id, dto);
+  }
 
-    if (!user.rowCount) {
-      return response
-        .status(404)
-        .json(`Пользователь с таким e-mail не зарегестрирован`);
-    }
-
-    const comparePassword = compareSync(password, user.rows[0].password);
-
-    if (!comparePassword) {
-      return response.status(404).json(`Неверный пароль`);
-    }
-
-    const subscriptions = await db.query(
-      `
-        SELECT users.id, users.name, users.avatar FROM users
-        JOIN subscriptions ON users.id = subscriptions.to_user_id
-        WHERE from_user_id = $1
-      `,
-      [user.rows[0].id],
-    );
-
-    const token = generateJwt(user.rows[0]);
-
-    return response.json({token: token, subscriptions: subscriptions.rows});
+  @Patch('/subscribe/:channelId')
+  async subscribeToChannel(
+    @CurrentUser({required: true}) {id},
+    @Param('channelId') channelId: number,
+  ) {
+    return this.userService.subscribe(id, channelId);
   }
 }
