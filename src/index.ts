@@ -9,12 +9,18 @@ dotenv.config();
 import {AuthController} from './controller/auth-controller';
 import {UserController} from './controller/user-controller';
 import {VideoController} from './controller/video-controller';
+import {CommentController} from './controller/comment-controller';
 
 const PORT = process.env.PORT || 9000;
 
 const app = createExpressServer({
   cors: true,
-  controllers: [AuthController, UserController, VideoController],
+  controllers: [
+    AuthController,
+    UserController,
+    VideoController,
+    CommentController,
+  ],
   routePrefix: '/api',
   currentUserChecker: async (action: Action) => {
     const token = action.request.headers.authorization.split(' ')[1];
