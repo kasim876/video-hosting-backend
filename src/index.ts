@@ -2,7 +2,7 @@ import * as path from 'path';
 import dotenv from 'dotenv';
 import {Action, createExpressServer} from 'routing-controllers';
 import serveStatic from 'serve-static';
-import jwt from 'jsonwebtoken';
+import jwt, {JwtPayload} from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -15,17 +15,14 @@ const PORT = process.env.PORT || 9000;
 
 const app = createExpressServer({
   cors: true,
-  controllers: [
-    AuthController,
-    UserController,
-    VideoController,
-    CommentController,
-  ],
+  controllers: [AuthController, UserController, VideoController, CommentController],
   routePrefix: '/api',
   currentUserChecker: async (action: Action) => {
     const token = action.request.headers.authorization.split(' ')[1];
 
-    return jwt.verify(token, process.env.JWT_SECRET);
+    const user: any = jwt.verify(token, process.env.JWT_SECRET);
+
+    return user.id;
   },
 });
 
