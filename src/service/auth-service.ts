@@ -6,17 +6,11 @@ import {compare, hash} from 'bcrypt';
 import {UserEntity} from '../entity/user-entity';
 import {db} from '../db';
 import {AuthDto} from '../types/auth-dto';
+import {UserService} from './user-service';
 
 export class AuthService {
   private readonly userRepository: Repository<UserEntity> = db.getRepository(UserEntity);
-
-  returnUserFields(user: UserEntity) {
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    };
-  }
+  private readonly userService: UserService = new UserService();
 
   createAccessToken(userId: number) {
     const data = {
@@ -59,7 +53,7 @@ export class AuthService {
     const user = await this.userRepository.save(newUser);
 
     return {
-      user: this.returnUserFields(user),
+      user: this.userService.returnUserFields(user),
       accessToken: this.createAccessToken(user.id),
     };
   }
@@ -68,7 +62,7 @@ export class AuthService {
     const user = await this.validateUser(dto);
 
     return {
-      user: this.returnUserFields(user),
+      user: this.userService.returnUserFields(user),
       accessToken: this.createAccessToken(user.id),
     };
   }
