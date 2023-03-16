@@ -1,12 +1,12 @@
 import {FindOptionsWhereProperty, ILike, Repository} from 'typeorm';
+import {v4 as uuidv4} from 'uuid';
 
 import {db} from '../db';
 import {VideoEntity} from '../entity/video-entity';
 import {VideoDto} from '../types/video-dto';
 
 export class VideoService {
-  private readonly videoRepository: Repository<VideoEntity> =
-    db.getRepository(VideoEntity);
+  private readonly videoRepository: Repository<VideoEntity> = db.getRepository(VideoEntity);
 
   async create(id: number, dto: VideoDto) {
     const newVideo = this.videoRepository.create({
@@ -48,7 +48,7 @@ export class VideoService {
   }
 
   async getOne(id: number) {
-    return this.videoRepository.findOne({
+    return await this.videoRepository.findOne({
       where: {id},
       relations: {
         user: true,
@@ -80,7 +80,7 @@ export class VideoService {
   }
 
   async getMostPopular() {
-    return this.videoRepository.find({
+    return await this.videoRepository.find({
       relations: {
         user: true,
       },
